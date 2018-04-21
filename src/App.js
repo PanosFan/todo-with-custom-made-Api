@@ -14,7 +14,6 @@ class App extends Component {
   componentDidMount() {
     axios.get('http://localhost:4000/api/todos')
     .then(response => {   
-      console.log(response)   
       this.setState({
         task: response.data
       });
