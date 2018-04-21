@@ -7,16 +7,15 @@ import './app.css';
 class App extends Component {
 
   state = {
-    todo: [],
+    task: [],
     input: ''
   }
 
   componentDidMount() {
     axios.get('http://localhost:4000/api/todos')
-    .then(response => {
-      console.log(response);
+    .then(response => {      
       this.setState({
-        todo: response.data
+        task: response.data
       });
     })
   }
@@ -29,20 +28,24 @@ class App extends Component {
 
   addTodo = (e) => {
     e.preventDefault();
-    let copy = this.state.todo.slice();
-    copy.push(this.state.input);
-    this.setState({
-      todo: copy,
-      input: ""
+    axios.post('http://localhost:4000/api/todos', {
+      todo: this.state.input
     })
+    .then(res => {      
+      this.setState({
+       task: res.data,
+       input: ""
+      });    
+    });    
   }
 
-  deleteTodo = (i) => {
-    let copy = this.state.todo.slice();
-    copy.splice(i, 1);
-    this.setState({
-      todo: copy
-    })
+  deleteTodo = (id) => {
+    axios.delete(`http://localhost:4000/api/todos/${id}`)
+    .then(res => {      
+      this.setState({
+        task: res.data
+      });
+    });
   }
 
 
@@ -55,9 +58,9 @@ class App extends Component {
             <button type="submit">Add todo</button>            
           </form>
           <FlipMove staggerDelayBy={750} appearAnimation="accordionVertical" enterAnimation="fade" leaveAnimation="fade">
-          {this.state.todo.map((item, index) => {
+          {this.state.task.map((item, index) => {
             return(
-              <div className="custom" onClick={() => this.deleteTodo(index)} key={index}>{item.todo}</div>
+              <div className="custom" onClick={() => this.deleteTodo(item._id)} key={index}>{item.todo}</div>
             );
           })}
           </FlipMove>       
