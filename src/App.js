@@ -13,7 +13,8 @@ class App extends Component {
 
   componentDidMount() {
     axios.get('http://localhost:4000/api/todos')
-    .then(response => {      
+    .then(response => {   
+      console.log(response)   
       this.setState({
         task: response.data
       });
@@ -30,25 +31,28 @@ class App extends Component {
     e.preventDefault();
     if (this.state.input.length>0) {
       axios.post('http://localhost:4000/api/todos', {
-      todo: this.state.input
-    })
-    .then(res => {      
-      this.setState({
-       task: res.data,
-       input: ""
+        todo: this.state.input
+      })
+      .then(res => {
+        this.setState({
+          task: res.data,
+          input: ""
+        });  
       });    
-    });    
     }
   }
 
-  deleteTodo = (id) => {
+  deleteTodo = (id, i) => {
      axios.delete(`http://localhost:4000/api/todos/${id}`)
-    .then(res => {      
-      this.setState({
-        task: res.data
-      });
-    });
-    
+    .then(res => {   
+      if (res.status === 200) {
+        let copy = this.state.task;
+        copy.splice(i, 1);
+        this.setState({
+          task: copy
+        });
+      }      
+    });    
   }
 
   edit = (id) => {
@@ -77,7 +81,7 @@ class App extends Component {
           <FlipMove staggerDelayBy={750} appearAnimation="accordionVertical" enterAnimation="fade" leaveAnimation="fade">
           {this.state.task.map((item, index) => {
             return(
-              <div className="custom" key={index}>{item.todo}<button onClick={() => this.edit(item._id)}>Edit</button><button onClick={() => this.deleteTodo(item._id)}>Delete</button></div>
+              <div className="custom" key={index}>{item.todo}<button onClick={() => this.edit(item._id)}>Edit</button><button onClick={() => this.deleteTodo(item._id, index)}>Delete</button></div>
             );
           })}
           </FlipMove>       

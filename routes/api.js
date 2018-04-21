@@ -31,9 +31,7 @@ router.put('/todos/:id', function(req, res, next){
 //delete request
 router.delete('/todos/:id', function(req, res, next){
   Todo.findByIdAndRemove({_id: req.params.id}).then(function(){
-    Todo.find({}).then(function(todos){
-      res.send(todos)
-    });
+    res.status(200).send({message: "Todo deleted"})
   });  
 });
 
