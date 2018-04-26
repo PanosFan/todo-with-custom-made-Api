@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import FlipMove from 'react-flip-move';
 import axios from 'axios';
+import './app.css';
 
 
 
@@ -80,7 +81,7 @@ class App extends Component {
           <FlipMove staggerDelayBy={750} appearAnimation="accordionVertical" enterAnimation="fade" leaveAnimation="fade">
           {this.state.task.map((item, index) => {
             return(
-              <div className="custom" key={index}><button onClick={() => this.edit(item._id)}>Edit</button><button onClick={() => this.deleteTodo(item._id, index)}>Delete</button>{item.todo}</div>
+              <div className="custom" key={index}><button onClick={() => this.edit(item._id)}>Edit</button><button className="btnD" onClick={() => this.deleteTodo(item._id, index)}>Delete</button>{item.todo}</div>
             );
           })}
           </FlipMove>       
